@@ -1,6 +1,6 @@
 username = {
-    "dr_adarsh" : ["abc", "200000"],
-    "mr_rahul" : ["xyz", "100000"],
+    "dr_adarsh" : ["abc", 200000.0],
+    "mr_rahul" : ["xyz", 100000.0],
 }
 
 def login():
@@ -14,14 +14,12 @@ def login():
             p1 = input("Enter the password : ")
             if (p1 == username[u1][0]):
                 print("You've Logged in Succcesfully ! ")
-                balance = float(username[u1][1])
+                balance = (username[u1][1])
                 return True
             else:
                 print("Sorry..Please enter correct password")
         else:
             print("Sorry..Enter correct username")
-
-
 
 def menu():
     print("ATM Service Menu")
@@ -30,41 +28,63 @@ def menu():
     print("3. Check Balance")
     print("4. Change Password")
     print("5. Exit")
-
-    t = int(input("Please Enter your choice : "))
-
+    
+    try:
+        t = int(input("Please Enter your choice : "))
+    except ValueError:
+        print("Invalid choice. Please enter a number from 1 to 5.")
+        return True
+         
     if (t == 1):
         withdrawl()
+        return True
     elif (t == 2):
         deposite()
+        return True
     elif (t == 3):
         check_balance()
+        return True
     elif (t == 4):
         change_password()
+        return True
     elif (t == 5):
         exit()
-        login()
-
+        return False
+    else:
+         print("Invalid choice. Please enter a number from 1 to 5.")
+         return True
 
 def withdrawl():
-        amt1 = int(input("Enter the amount : "))
         global balance
         global u1
-        if (amt1 <= balance):
-            balance -= amt1
-            username[u1][1] = str(balance)
-            print("Amount withdrawled succesfully.")
-            print("Thanks for using ATM services.")
-
+        try:
+            amt1 = float(input("Enter the amount : "))
+            if (0 < amt1 <= balance):
+                balance -= amt1
+                username[u1][1] = float(balance)
+                print("Amount withdrawled succesfully.")
+                print("Thanks for using ATM services.")
+            else :
+                print("Sorry! Insufficient Balance")
+        
+        except ValueError:
+             print("Invalid input. Please enter a numerical amount.")
 
 def deposite():
-        amt2 = float(input("Enter the amount : "))
         global balance
         global u1
-        balance += amt2
-        username[u1][1] = str(balance)
-        print("Amount Deposited succesfully.")
-        print("Thanks for using ATM services.")
+        try:
+            amt2 = float(input("Enter the amount : "))
+            if (0 < amt2):
+                 balance += amt2
+                 username[u1][1] = float(balance)
+                 print("Amount Deposited succesfully.")
+                 print("Thanks for using ATM services.")
+            else:
+                 print("Invalid amount. You must deposit a positive value.")
+            
+        except ValueError:
+             print("Invalid input. Please enter a numerical amount.")
 
 def check_balance():
         global balance
@@ -78,12 +98,11 @@ def change_password():
         print("Thanks for using ATM services.")
         print("Please visit again !")
 
-
 def exit():
         print("Thanks for using ATM services.")
         print("Please visit again !")
         print("You've been succesfully logged out.")
 
 if login():
-    while True:
-        menu()
+    while menu():
+        pass
